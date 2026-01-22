@@ -1,0 +1,12 @@
+:root {
+}
+
+.slot {
+    background-color: rgb(53, 53, 53);
+    width: 64px;
+    height: 64px;
+    margin-left: 4px;
+    margin-top: 4px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
