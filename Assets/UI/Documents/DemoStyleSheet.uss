@@ -1,12 +1,17 @@
 :root {
 }
 
-.slot {
+.inventory__slot {
     background-color: rgb(53, 53, 53);
-    width: 64px;
-    height: 64px;
-    margin-left: 4px;
-    margin-top: 4px;
-    margin-right: 4px;
-    margin-bottom: 4px;
 }
+
+
+.inventory__container-slot {
+    background-color: rgb(175, 175, 175);
+}
+
+
+.inventory__container {
+    background-color: rgb(215, 215, 215);
+}
+

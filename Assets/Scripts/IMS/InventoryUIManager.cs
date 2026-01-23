@@ -8,25 +8,28 @@ namespace IMS
         [NotNull] private readonly Inventory _inventory;
         private readonly InventoryUIOptions _options;
 
-        public InventoryUIManager(Inventory inv)
-        {
-            _inventory = inv;
-            _options = new InventoryUIOptions();
-        }
-
         public InventoryUIManager(Inventory inv, InventoryUIOptions options)
         {
             _inventory = inv;
             _options = options;
         }
 
-        // TODO: Everything should be customizable
-
         /// <summary>
-        /// Create a new Inventory VisualElement
+        /// Create a new Inventory UI with the following USS classes assigned:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The container uses inventory__container</description>
+        /// </item>
+        /// <item>
+        /// <description>The slot container uses inventory__slot-container</description>
+        /// </item>
+        /// <item>
+        /// <description>The slots use inventory__slot</description>
+        /// </item>
+        /// </list>
         /// </summary>
         /// <returns>The full inventory UI</returns>
-        public virtual VisualElement CreateInventory()
+        public virtual void CreateInventory()
         {
             var containerVe = new VisualElement
             {
@@ -38,10 +41,11 @@ namespace IMS
                     flexGrow = 0
                 }
             };
+            containerVe.AddToClassList("inventory__container");
 
             var label = new Label
             {
-                text = "Inventory"
+                text = _inventory.Name
             };
 
             var slotContainerVe = new VisualElement
@@ -61,6 +65,7 @@ namespace IMS
                     flexGrow = 0
                 }
             };
+            slotContainerVe.AddToClassList("inventory__slot-container");
             containerVe.Add(label);
             containerVe.Add(slotContainerVe);
 
@@ -79,11 +84,11 @@ namespace IMS
                         flexShrink = 0
                     }
                 };
-
+                slotVe.AddToClassList("inventory__slot");
                 slotContainerVe.Add(slotVe);
             }
 
-            return containerVe;
+            _options.InventoryRoot.Add(containerVe);
         }
     }
 }

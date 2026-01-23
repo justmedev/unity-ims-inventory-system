@@ -10,8 +10,12 @@ namespace Demo
 
         private void Start()
         {
-            var inventory = new Inventory(document.rootVisualElement.Q("inventoryRoot"), new InventoryUIOptions(), 6,
-                3);
+            new Inventory(
+                "Inventory",
+                6,
+                3,
+                new InventoryUIOptions(document.rootVisualElement.Q("inventoryRoot"))
+            );
         }
     }
 }
