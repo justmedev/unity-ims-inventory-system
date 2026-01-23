@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace IMS
 {
     /// <summary>
-    /// Manages the inventory's UI display and interaction. Only to be used by the <see cref="Inventory"/>.
+    ///     Manages the inventory's UI display and interaction. Only to be used by the <see cref="Inventory" />.
     /// </summary>
     internal class InventoryUIManager
     {
@@ -18,18 +18,18 @@ namespace IMS
         }
 
         /// <summary>
-        /// Create a new Inventory UI with the following USS classes assigned:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>The container uses inventory__container</description>
-        /// </item>
-        /// <item>
-        /// <description>The slot container uses inventory__slot-container</description>
-        /// </item>
-        /// <item>
-        /// <description>The slots use inventory__slot</description>
-        /// </item>
-        /// </list>
+        ///     Create a new Inventory UI with the following USS classes assigned:
+        ///     <list type="bullet">
+        ///         <item>
+        ///             <description>The container uses inventory__container</description>
+        ///         </item>
+        ///         <item>
+        ///             <description>The slot container uses inventory__slot-container</description>
+        ///         </item>
+        ///         <item>
+        ///             <description>The slots use inventory__slot</description>
+        ///         </item>
+        ///     </list>
         /// </summary>
         /// <returns>The full inventory UI</returns>
         internal virtual void CreateInventory()
