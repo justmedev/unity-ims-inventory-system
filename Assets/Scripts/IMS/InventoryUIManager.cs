@@ -3,12 +3,15 @@ using UnityEngine.UIElements;
 
 namespace IMS
 {
-    public class InventoryUIManager
+    /// <summary>
+    /// Manages the inventory's UI display and interaction. Only to be used by the <see cref="Inventory"/>.
+    /// </summary>
+    internal class InventoryUIManager
     {
         [NotNull] private readonly Inventory _inventory;
         private readonly InventoryUIOptions _options;
 
-        public InventoryUIManager(Inventory inv, InventoryUIOptions options)
+        internal InventoryUIManager(Inventory inv, InventoryUIOptions options)
         {
             _inventory = inv;
             _options = options;
@@ -29,7 +32,7 @@ namespace IMS
         /// </list>
         /// </summary>
         /// <returns>The full inventory UI</returns>
-        public virtual void CreateInventory()
+        internal virtual void CreateInventory()
         {
             var containerVe = new VisualElement
             {

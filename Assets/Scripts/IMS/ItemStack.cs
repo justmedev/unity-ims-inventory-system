@@ -4,9 +4,17 @@ using JetBrains.Annotations;
 
 namespace IMS
 {
+    /// <summary>
+    /// Holds multiple items with a single item type.
+    /// </summary>
     public class ItemStack
     {
-        [NotNull] public IItem Item { get; private set; }
+        /// <summary>
+        /// Represents the item type this inventory holds.
+        /// </summary>
+        [NotNull]
+        public IItem Item { get; private set; }
+
         private int _quantity;
 
         /// <summary>
@@ -24,6 +32,9 @@ namespace IMS
             }
         }
 
+        /// <summary>
+        /// Returns if this <see cref="ItemStack"/> is empty.
+        /// </summary>
         public bool IsEmpty => Quantity == 0;
 
         /// <summary>
