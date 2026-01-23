@@ -48,6 +48,23 @@ namespace IMS
         /// </summary>
         public int Cols { get; }
 
+        public delegate void SlotModifier([NotNull] ref ItemStack stack);
+
+        /// <summary>
+        ///     Modify slot <see cref="ItemStack"/> data and re-render the UI at once.
+        /// </summary>
+        /// <remarks>WARNING: ItemStack cannot be null!</remarks>
+        /// <param name="index">Position of the slot</param>
+        /// <param name="modifier">Lambda with <see cref="ItemStack"/> reference you can modify.</param>
+        /// <exception cref="InventorySlotEmptyException">When <see cref="ItemStack"/> is null.</exception>
+        public void ModifySlotItemStack(int index, [NotNull] SlotModifier modifier)
+        {
+            var stack = _slots[index].ItemStack;
+            if (stack == null) throw new InventorySlotEmptyException(index);
+            modifier.Invoke(ref stack);
+            PropagateChange(index);
+        }
+
         /// <summary>
         ///     Place and render an item in a slot.
         /// </summary>
@@ -57,7 +74,26 @@ namespace IMS
         public void PlaceItemStack(int index, [NotNull] ItemStack stack)
         {
             Slots[index].PlaceItemStack(stack);
+            PropagateChange(index);
+        }
+
+        /// <summary>
+        ///     After directly modifying the <see cref="Slots"/> data (adding/removing stacks, modifying content, ...)
+        ///     This should be called to reflect the changes in the UI.
+        /// </summary>
+        /// <param name="index">The slot position/index you modified.</param>
+        public void PropagateChange(int index)
+        {
             _uiManager.Render(index);
+        }
+
+        /// <summary>
+        ///     After directly modifying multiple <see cref="Slots"/>, or <see cref="Slots"/> you do not know the
+        ///     index off, call this to re-render all the UI.
+        /// </summary>
+        public void PropagateChanges()
+        {
+            _uiManager.Render();
         }
     }
 }

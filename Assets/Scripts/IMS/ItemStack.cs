@@ -14,6 +14,7 @@ namespace IMS
         /// <summary>
         ///     Hold multiple items in a stack.
         /// </summary>
+        /// <remarks>WARNING: An item stack starts empty, so with this constructor the quantity will be 0!</remarks>
         /// <param name="item">The type of item this stack holds. The type cannot change!</param>
         public ItemStack([NotNull] IItem item)
         {
@@ -61,19 +62,13 @@ namespace IMS
         /// <summary>
         ///     Add an item to the inventory stack, if possible.
         /// </summary>
-        /// <param name="item">The item to add. Must be the same type as the items that are already on the stack.</param>
-        /// <exception cref="IncompatibleItemException">
-        ///     When adding an item that has a different type than the items on the stack
-        ///     already.
-        /// </exception>
         /// <exception cref="ItemStackFullException">
         ///     When the item stack capacity is reached and thus, the item would overflow the
         ///     stack.
         /// </exception>
-        public void AddItem([NotNull] IItem item)
+        public void AddItem()
         {
-            if (!item.Equals(Item)) throw new IncompatibleItemException(Item, item);
-            if (Item.GetMaxQuantity() > Quantity + 1) throw new ItemStackFullException(this, item);
+            if (Item.GetMaxQuantity() > Quantity + 1) throw new ItemStackFullException(this, Item);
             Quantity++;
         }
 
@@ -120,12 +115,12 @@ namespace IMS
             for (var i = 0; i < stack.Quantity; i++)
                 try
                 {
-                    var item = stack.TakeItem() ?? throw new Exception("Stack was modified in iteration!");
-                    AddItem(item);
+                    if (stack.TakeItem() == null) throw new Exception("Stack was modified in iteration!");
+                    AddItem();
                 }
                 catch (ItemStackFullException)
                 {
-                    stack.AddItem(stack.Item);
+                    stack.AddItem();
                 }
 
             return stack;

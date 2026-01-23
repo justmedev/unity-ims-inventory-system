@@ -121,25 +121,29 @@ namespace IMS
             var slot = _inventory.Slots[slotIndex];
             var slotVe = _renderedSlots[slotIndex];
 
-            if (slot.IsEmpty)
-            {
-                foreach (var child in slotVe.Children())
-                {
-                    child.RemoveFromHierarchy();
-                }
-
-                return;
-            }
+            slotVe.Clear();
+            if (slot.IsEmpty) return;
 
             var itemVe = new VisualElement
             {
                 style =
                 {
-                    backgroundImage = new StyleBackground(slot.GetImageStack().Item.GetSprite()),
+                    backgroundImage = new StyleBackground(slot.GetItemStack().Item.GetSprite()),
                     width = new StyleLength(new Length(100, LengthUnit.Percent)),
-                    height = new StyleLength(new Length(100, LengthUnit.Percent))
+                    height = new StyleLength(new Length(100, LengthUnit.Percent)),
+                    alignContent = Align.FlexEnd,
+                    justifyContent = Justify.FlexEnd,
                 }
             };
+            itemVe.AddToClassList("inventory__slot-item");
+
+            var label = new Label
+            {
+                text = slot.GetItemStack().Quantity.ToString()
+            };
+            label.AddToClassList("inventory__slot-item-qty");
+
+            itemVe.Add(label);
             slotVe.Add(itemVe);
         }
     }

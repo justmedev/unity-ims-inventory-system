@@ -50,15 +50,25 @@ namespace IMS
         }
 
         /// <summary>
+        ///     Remove an ItemStack from the slot.
+        /// </summary>
+        /// <exception cref="InventorySlotEmptyException">When the slot is empty.</exception>
+        public void RemoveItemStack()
+        {
+            if (ItemStack == null) throw new InventorySlotEmptyException(Index);
+            ItemStack = null;
+        }
+
+        /// <summary>
         ///     Return a non-null ImageStack. Throws when the slot is empty.
         /// </summary>
-        /// <exception cref="EmptyInventorySlotException">When the slot is empty.</exception>
+        /// <exception cref="InventorySlotEmptyException">When the slot is empty.</exception>
         /// <returns>A non-null ItemStack</returns>
         [NotNull]
-        public ItemStack GetImageStack()
+        public ItemStack GetItemStack()
         {
             _logger.Info($"GetImageStack() -> Empty? {IsEmpty} | ItemStack -> {ItemStack}");
-            if (IsEmpty || ItemStack == null) throw new EmptyInventorySlotException();
+            if (IsEmpty || ItemStack == null) throw new InventorySlotEmptyException(Index);
             return ItemStack;
         }
     }

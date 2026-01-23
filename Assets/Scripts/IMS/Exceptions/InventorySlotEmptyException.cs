@@ -5,9 +5,9 @@ namespace IMS.Exceptions
     /// <summary>
     ///     Thrown when the item stack that was tried to operate on was empty.
     /// </summary>
-    public class EmptyInventorySlotException : Exception
+    public class InventorySlotEmptyException : Exception
     {
-        public EmptyInventorySlotException() : base("The inventory slot is empty!")
+        public InventorySlotEmptyException(int index) : base($"The inventory slot {index} is empty!")
         {
         }
     }

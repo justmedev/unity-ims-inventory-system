@@ -15,3 +15,8 @@
     background-color: rgb(215, 215, 215);
 }
 
+.inventory__slot-item-qty {
+    font-size: 20px;
+    align-self: flex-end;
+    color: white;
+}

@@ -19,7 +19,9 @@ namespace Demo
                 new InventoryUIOptions(document.rootVisualElement.Q("inventoryRoot"))
             );
 
-            inventory.PlaceItemStack(0, new ItemStack(item));
+            inventory.PlaceItemStack(0, new ItemStack(item, 5));
+            inventory.ModifySlotItemStack(0,
+                (ref ItemStack stack) => { Debug.Log(stack.AddStack(new ItemStack(item, 10)).Quantity); });
         }
     }
 }

@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb7a7fa5629a434c9c4870801bfe69d4, type: 3}
-  m_Name: Tomato
+  m_Name: Carrot
   m_EditorClassIdentifier: Assembly-CSharp::Demo.Items.Item
   label: Tomato
   maxStackSize: 10
-  sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  sprite: {fileID: 21300000, guid: 985747ea4ab0fab8c8e704b7b941fbb3, type: 3}
