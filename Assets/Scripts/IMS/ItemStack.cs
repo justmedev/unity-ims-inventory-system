@@ -15,9 +15,9 @@ namespace IMS
         ///     Hold multiple items in a stack.
         /// </summary>
         /// <param name="item">The type of item this stack holds. The type cannot change!</param>
-        public ItemStack(IItem item)
+        public ItemStack([NotNull] IItem item)
         {
-            Item = item;
+            Item = item ?? throw new ArgumentNullException(nameof(item));
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace IMS
         /// <exception cref="ValueNotInRangeException">When quantity is not in the range [0;MaxQuantity]</exception>
         public ItemStack(IItem item, int quantity)
         {
-            Item = item;
+            Item = item ?? throw new ArgumentNullException(nameof(item));
             Quantity = quantity;
         }
 

@@ -369,6 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fb9f9678ad64188bb0e91d1f45f6b29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Demo.Main
+  item: {fileID: 11400000, guid: 637520101ac379e7eaf28ed696fb6b60, type: 2}
   document: {fileID: 1841928468}
 --- !u!4 &740177778
 Transform:

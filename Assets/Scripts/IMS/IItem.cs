@@ -1,3 +1,6 @@
+using JetBrains.Annotations;
+using UnityEngine;
+
 namespace IMS
 {
     /// <summary>
@@ -17,5 +20,12 @@ namespace IMS
         /// </summary>
         /// <returns>Positive, non-null, > 1 number</returns>
         public int GetMaxQuantity();
+
+        /// <summary>
+        ///     The image to display for this item in inventory slots.
+        /// </summary>
+        /// <returns>Image to be used for inventories.</returns>
+        [NotNull]
+        public Sprite GetSprite();
     }
 }

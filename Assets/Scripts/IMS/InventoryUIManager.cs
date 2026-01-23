@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine.UIElements;
 
@@ -8,8 +9,11 @@ namespace IMS
     /// </summary>
     internal class InventoryUIManager
     {
+        private Logger _logger = new(nameof(InventoryUIManager));
+
         [NotNull] private readonly Inventory _inventory;
         private readonly InventoryUIOptions _options;
+        private List<VisualElement> _renderedSlots = new();
 
         internal InventoryUIManager(Inventory inv, InventoryUIOptions options)
         {
@@ -72,6 +76,7 @@ namespace IMS
             containerVe.Add(label);
             containerVe.Add(slotContainerVe);
 
+            _renderedSlots = new List<VisualElement>();
             foreach (var _ in _inventory.Slots)
             {
                 var slotVe = new VisualElement
@@ -89,9 +94,53 @@ namespace IMS
                 };
                 slotVe.AddToClassList("inventory__slot");
                 slotContainerVe.Add(slotVe);
+                _renderedSlots.Add(slotVe);
             }
 
             _options.InventoryRoot.Add(containerVe);
+        }
+
+        /// <summary>
+        ///     Renders all slots. Do not use this when you know what slot index you want to update.
+        /// </summary>
+        public void Render()
+        {
+            foreach (var slot in _inventory.Slots)
+            {
+                Render(slot.Index);
+            }
+        }
+
+        /// <summary>
+        ///     Render a single slot by index (position).
+        /// </summary>
+        /// <param name="slotIndex">The position of the slot you want to render.</param>
+        public void Render(int slotIndex)
+        {
+            _logger.Info($"Render@{slotIndex}");
+            var slot = _inventory.Slots[slotIndex];
+            var slotVe = _renderedSlots[slotIndex];
+
+            if (slot.IsEmpty)
+            {
+                foreach (var child in slotVe.Children())
+                {
+                    child.RemoveFromHierarchy();
+                }
+
+                return;
+            }
+
+            var itemVe = new VisualElement
+            {
+                style =
+                {
+                    backgroundImage = new StyleBackground(slot.GetImageStack().Item.GetSprite()),
+                    width = new StyleLength(new Length(100, LengthUnit.Percent)),
+                    height = new StyleLength(new Length(100, LengthUnit.Percent))
+                }
+            };
+            slotVe.Add(itemVe);
         }
     }
 }

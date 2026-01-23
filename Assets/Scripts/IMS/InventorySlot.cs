@@ -8,6 +8,8 @@ namespace IMS
     /// </summary>
     public class InventorySlot
     {
+        private Logger _logger = new(nameof(InventorySlot));
+
         /// <summary>
         ///     The position of this slot
         /// </summary>
@@ -29,6 +31,11 @@ namespace IMS
         [CanBeNull]
         public ItemStack ItemStack { get; private set; }
 
+        /// <summary>
+        ///     Check if there are any items on this slot.
+        /// </summary>
+        public bool IsEmpty => ItemStack == null;
+
         // TODO: Support auto placing same-type item stacks
 
         /// <summary>
@@ -40,6 +47,19 @@ namespace IMS
         {
             if (ItemStack != null) throw new InventorySlotOccupiedException(Index);
             ItemStack = stack;
+        }
+
+        /// <summary>
+        ///     Return a non-null ImageStack. Throws when the slot is empty.
+        /// </summary>
+        /// <exception cref="EmptyInventorySlotException">When the slot is empty.</exception>
+        /// <returns>A non-null ItemStack</returns>
+        [NotNull]
+        public ItemStack GetImageStack()
+        {
+            _logger.Info($"GetImageStack() -> Empty? {IsEmpty} | ItemStack -> {ItemStack}");
+            if (IsEmpty || ItemStack == null) throw new EmptyInventorySlotException();
+            return ItemStack;
         }
     }
 }

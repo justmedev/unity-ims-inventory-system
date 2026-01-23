@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using IMS.Exceptions;
 using JetBrains.Annotations;
 
 namespace IMS
@@ -46,5 +47,17 @@ namespace IMS
         ///     <c>Slots.Count / Cols</c>
         /// </summary>
         public int Cols { get; }
+
+        /// <summary>
+        ///     Place and render an item in a slot.
+        /// </summary>
+        /// <param name="index">The slot position to place the ItemStack into.</param>
+        /// <param name="stack">The stack to place onto the slot.</param>
+        /// <exception cref="InventorySlotOccupiedException">When the slot already has another item stack.</exception>
+        public void PlaceItemStack(int index, [NotNull] ItemStack stack)
+        {
+            Slots[index].PlaceItemStack(stack);
+            _uiManager.Render(index);
+        }
     }
 }
