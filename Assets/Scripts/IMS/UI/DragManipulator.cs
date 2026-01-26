@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -40,7 +41,20 @@ namespace IMS.UI
         /// <summary>
         ///     Subscribe to this to receive <see cref="DropEvent"/> events.
         /// </summary>
-        public DropEvent OnDrop;
+        [CanBeNull] public DropEvent OnDrop;
+
+        /// <summary>
+        ///     Fired when a <see cref="VisualElement"/> is picked up (mouse button clicked).
+        /// </summary>
+        /// <param name="pointerEvent">The <see cref="PointerDownEvent"/> that was received in the manipulator.</param>
+        /// <param name="targetVe">The <see cref="VisualElement"/> this manipulator is attached to.</param>
+        /// <returns>Whether to accept the event, or reject it, resetting the <see cref="VisualElement"/>.</returns>
+        public delegate bool PickupEvent(PointerDownEvent pointerEvent, VisualElement targetVe);
+
+        /// <summary>
+        ///     Subscribe to this to receive <see cref="PickupEvent"/> events.
+        /// </summary>
+        [CanBeNull] public PickupEvent OnPickup;
 
         public DragManipulator()
         {
@@ -81,6 +95,11 @@ namespace IMS.UI
             e.StopPropagation();
 
             target.BringToFront();
+
+            if (OnPickup == null || OnPickup.Invoke(e, target)) return;
+            IsDragging = false;
+            target.ReleaseMouse();
+            e.StopPropagation();
         }
 
         private void OnPointerMove(PointerMoveEvent e)
@@ -105,7 +124,7 @@ namespace IMS.UI
             target.ReleaseMouse();
             e.StopPropagation();
 
-            if (OnDrop.Invoke(e, target) || !StartOffset.HasValue) return;
+            if (OnDrop == null || OnDrop.Invoke(e, target) || !StartOffset.HasValue) return;
             target.style.top = StartOffset.Value.y;
             target.style.left = StartOffset.Value.x;
         }

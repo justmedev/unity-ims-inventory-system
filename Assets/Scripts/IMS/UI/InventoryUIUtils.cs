@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -19,7 +18,7 @@ namespace IMS.UI
         /// <param name="slotVe">The slot VisualElement, if found.</param>
         /// <returns>Wheter a match was found.</returns>
         public static bool TryGetInventorySlotAtPosition(VisualElement root, Vector2 position,
-            [CanBeNull] out VisualElement slotVe)
+            out VisualElement slotVe)
         {
             var picked = new List<VisualElement>();
             root.panel.PickAll(position, picked);
@@ -34,7 +33,7 @@ namespace IMS.UI
         /// <param name="userData">The <see cref="VisualElement.userData"/> with type <see cref="T"/> that was found.</param>
         /// <typeparam name="T">The type of <see cref="VisualElement.userData"/> to check.</typeparam>
         /// <returns>Whether a match was found.</returns>
-        public static bool TryGetTypedUserData<T>(VisualElement ve, [CanBeNull] out T userData) where T : class
+        public static bool TryGetTypedUserData<T>(VisualElement ve, out T userData) where T : class
         {
             userData = null;
             if (ve.userData is not T data) return false;

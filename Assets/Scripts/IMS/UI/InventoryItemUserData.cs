@@ -12,9 +12,15 @@ namespace IMS.UI
         /// </summary>
         public readonly int AttachedSlotIndex;
 
-        public InventoryItemUserData(int attachedSlotIndex)
+        /// <summary>
+        ///     The ItemStack this <see cref="VisualElement"/> holds.
+        /// </summary>
+        public readonly ItemStack ItemStack;
+
+        public InventoryItemUserData(int attachedSlotIndex, ItemStack itemStack)
         {
             AttachedSlotIndex = attachedSlotIndex;
+            ItemStack = itemStack;
         }
     };
 }

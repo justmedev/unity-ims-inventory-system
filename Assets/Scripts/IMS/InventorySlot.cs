@@ -53,10 +53,13 @@ namespace IMS
         ///     Remove an ItemStack from the slot.
         /// </summary>
         /// <exception cref="InventorySlotEmptyException">When the slot is empty.</exception>
-        public void RemoveItemStack()
+        /// <returns>The removed <see cref="ItemStack"/></returns>
+        public ItemStack RemoveItemStack()
         {
             if (ItemStack == null) throw new InventorySlotEmptyException(Index);
+            var stack = ItemStack;
             ItemStack = null;
+            return stack;
         }
 
         /// <summary>

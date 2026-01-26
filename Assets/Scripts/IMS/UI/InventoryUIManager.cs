@@ -161,7 +161,7 @@ namespace IMS.UI
                     flexGrow = 0,
                     aspectRatio = 1
                 },
-                userData = new InventoryItemUserData(slotIndex)
+                userData = new InventoryItemUserData(slotIndex, slot.GetItemStack())
             };
             itemVe.AddToClassList(InventoryUIClasses.SlotItem);
             ItemModifier?.Invoke(ref itemVe);

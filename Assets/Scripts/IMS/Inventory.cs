@@ -54,6 +54,22 @@ namespace IMS
             _uiManager.ItemModifier = modifier;
         }
 
+        /// <summary>
+        ///     Try to get an item stack at an index (inventory position).
+        /// </summary>
+        /// <param name="index">The position in the inventory.</param>
+        /// <param name="itemStack">The <see cref="ItemStack"/> at that position.</param>
+        /// <returns>Whether a match was found.</returns>
+        public bool TryGetItemStackAt(int index, out ItemStack itemStack)
+        {
+            itemStack = null;
+            var slot = Slots[index];
+            if (slot.IsEmpty) return false;
+            itemStack = slot.ItemStack;
+
+            return true;
+        }
+
         public delegate void SlotModifier([NotNull] ref ItemStack stack);
 
         /// <summary>

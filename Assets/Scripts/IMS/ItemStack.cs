@@ -68,7 +68,7 @@ namespace IMS
         /// </exception>
         public void AddItem()
         {
-            if (Item.GetMaxQuantity() > Quantity + 1) throw new ItemStackFullException(this, Item);
+            if (Item.GetMaxQuantity() < Quantity + 1) throw new ItemStackFullException(this, Item);
             Quantity++;
         }
 

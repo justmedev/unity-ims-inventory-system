@@ -28,16 +28,34 @@ namespace Demo
                 {
                     if (!InventoryUIUtils.TryGetInventorySlotAtPosition(inventoryRoot, @event.position, out var slotVe))
                         return false;
-                    Debug.Log("TryGetInventorySlotAtPosition");
                     if (!InventoryUIUtils.TryGetTypedUserData<InventorySlotUserData>(slotVe, out var slotData))
                         return false;
-                    Debug.Log("TryGetTypedUserData<InventorySlotUserData>");
-                    // if (!InventoryUIUtils.TryGetTypedUserData<InventoryItemUserData>(itemVe, out var itemData))
-                    //     return false;
-                    // Debug.Log("TryGetTypedUserData<InventoryItemUserData>");
+                    if (!InventoryUIUtils.TryGetTypedUserData<InventoryItemUserData>(itemVe, out var itemData))
+                        return false;
+                    Debug.Log($"TryGetTypedUserData<InventoryItemUserData> preivous: {itemData.AttachedSlotIndex}");
 
-                    // inventory.PlaceItemStack(slotData.Index, itemData.AttachedSlotIndex);
-                    InventoryUIUtils.SnapVisualElementToOtherVisualElement(itemVe, slotVe);
+                    // Remove from previous index
+                    if (inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
+                    {
+                        inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
+                        // TODO: Split stack
+                    }
+
+                    // Move into new
+                    if (inventory.TryGetItemStackAt(slotData.Index, out _))
+                    {
+                        inventory.ModifySlotItemStack(slotData.Index, (ref ItemStack itemStack) =>
+                        {
+                            var overflow = itemStack.AddStack(itemData.ItemStack);
+                            if (overflow.Quantity != 0) Debug.Log($"{overflow.Quantity} items overflowed!");
+                            // TODO: Handle overflow
+                        });
+                        itemVe.RemoveFromHierarchy();
+                        return true;
+                    }
+
+                    inventory.PlaceItemStack(slotData.Index, itemData.ItemStack);
+                    itemVe.RemoveFromHierarchy();
                     return true;
                 };
                 ve.AddManipulator(dm);
