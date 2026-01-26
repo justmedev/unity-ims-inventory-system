@@ -37,6 +37,8 @@ namespace Demo
                 CreateItemVisualElementModifier(_hotbar, document.rootVisualElement, ref ve));
 
             _inventory.PlaceItemStack(0, new ItemStack(item, 5));
+            _inventory.PlaceItemStack(2, new ItemStack(item, 5));
+            _inventory.PlaceItemStack(4, new ItemStack(item, 5));
         }
 
         private static void CreateItemVisualElementModifier(Inventory inventory, VisualElement inventoryRoot,
@@ -54,7 +56,7 @@ namespace Demo
 
                 var dstInventory = InventoryManager.Instance.GetInventoryById(slotData.InventoryId);
 
-                // Remove from previous index
+                // Remove from previous
                 if (inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
                 {
                     inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
@@ -64,18 +66,37 @@ namespace Demo
                 // Move into new
                 if (dstInventory.TryGetItemStackAt(slotData.Index, out _))
                 {
+                    var acceptItem = true;
                     dstInventory.ModifySlotItemStack(slotData.Index, (ref ItemStack itemStack) =>
                     {
                         var overflow = itemStack.AddStack(itemData.ItemStack);
-                        if (overflow.Quantity != 0) Debug.Log($"{overflow.Quantity} items overflowed!");
-                        // TODO: Handle overflow
+                        itemVe.RemoveFromHierarchy();
+
+                        Debug.Log($"{overflow.Quantity} items overflowed!");
+                        if (overflow.Quantity > 0)
+                        {
+                            inventory.Slots[itemData.AttachedSlotIndex].PlaceItemStack(overflow);
+                            inventory.PropagateChange(itemData.AttachedSlotIndex);
+                            acceptItem = false;
+                        }
+                        else
+                        {
+                            acceptItem = true;
+                        }
                     });
-                    itemVe.RemoveFromHierarchy();
-                    return true;
+                    return acceptItem;
                 }
 
                 dstInventory.PlaceItemStack(slotData.Index, itemData.ItemStack);
                 itemVe.RemoveFromHierarchy();
+
+                // Remove from previous index
+                // if (inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
+                // {
+                //     inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
+                //     // TODO: Split stack
+                // }
+
                 return true;
             };
             ve.AddManipulator(dm);

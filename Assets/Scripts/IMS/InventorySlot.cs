@@ -36,8 +36,6 @@ namespace IMS
         /// </summary>
         public bool IsEmpty => ItemStack == null;
 
-        // TODO: Support auto placing same-type item stacks
-
         /// <summary>
         ///     Place an item stack onto the inventory slot.
         /// </summary>

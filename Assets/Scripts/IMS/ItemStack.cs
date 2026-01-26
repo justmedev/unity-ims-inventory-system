@@ -111,19 +111,12 @@ namespace IMS
         /// <returns>A stack with all the items that could not be added (Due to reaching capacity mid-adding).</returns>
         public ItemStack AddStack([NotNull] ItemStack stack)
         {
-            if (stack.Quantity == 0) return stack;
-            for (var i = 0; i < stack.Quantity; i++)
-                try
-                {
-                    if (stack.TakeItem() == null) throw new Exception("Stack was modified in iteration!");
-                    AddItem();
-                }
-                catch (ItemStackFullException)
-                {
-                    stack.AddItem();
-                }
-
-            return stack;
+            var overflow = new ItemStack(Item, 0)
+            {
+                Quantity = Math.Max(0, Quantity + stack.Quantity - Item.GetMaxQuantity())
+            };
+            Quantity = Math.Min(Quantity + stack.Quantity, Item.GetMaxQuantity());
+            return overflow;
         }
     }
 }

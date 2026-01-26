@@ -20,3 +20,8 @@
     align-self: flex-end;
     color: white;
 }
+
+/* Example: Hide the label of an inventory */
+#hotbarRoot > .inventory__container > Label {
+    display: none;
+}
