@@ -10,18 +10,19 @@ namespace Demo
     {
         [SerializeField] private Item item;
         [SerializeField] private UIDocument document;
+        private Inventory _inventory;
 
         private void Start()
         {
             var inventoryRoot = document.rootVisualElement.Q("inventoryRoot");
-            var inventory = new Inventory(
+            _inventory = new Inventory(
                 "Inventory",
                 6,
                 3,
                 new InventoryUIOptions(inventoryRoot)
             );
 
-            inventory.SetUIManagerItemVisualElementModifier((ref VisualElement ve) =>
+            _inventory.SetUIManagerItemVisualElementModifier((ref VisualElement ve) =>
             {
                 var dm = new DragManipulator();
                 dm.OnDrop += (@event, itemVe) =>
@@ -35,16 +36,16 @@ namespace Demo
                     Debug.Log($"TryGetTypedUserData<InventoryItemUserData> preivous: {itemData.AttachedSlotIndex}");
 
                     // Remove from previous index
-                    if (inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
+                    if (_inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
                     {
-                        inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
+                        _inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
                         // TODO: Split stack
                     }
 
                     // Move into new
-                    if (inventory.TryGetItemStackAt(slotData.Index, out _))
+                    if (_inventory.TryGetItemStackAt(slotData.Index, out _))
                     {
-                        inventory.ModifySlotItemStack(slotData.Index, (ref ItemStack itemStack) =>
+                        _inventory.ModifySlotItemStack(slotData.Index, (ref ItemStack itemStack) =>
                         {
                             var overflow = itemStack.AddStack(itemData.ItemStack);
                             if (overflow.Quantity != 0) Debug.Log($"{overflow.Quantity} items overflowed!");
@@ -54,14 +55,14 @@ namespace Demo
                         return true;
                     }
 
-                    inventory.PlaceItemStack(slotData.Index, itemData.ItemStack);
+                    _inventory.PlaceItemStack(slotData.Index, itemData.ItemStack);
                     itemVe.RemoveFromHierarchy();
                     return true;
                 };
                 ve.AddManipulator(dm);
             });
-            inventory.PlaceItemStack(0, new ItemStack(item, 5));
-            inventory.ModifySlotItemStack(0,
+            _inventory.PlaceItemStack(0, new ItemStack(item, 5));
+            _inventory.ModifySlotItemStack(0,
                 (ref ItemStack stack) => { Debug.Log(stack.AddStack(new ItemStack(item, 10)).Quantity); });
         }
     }

@@ -67,19 +67,13 @@ namespace IMS.UI
             {
                 style =
                 {
-                    marginTop = _options.Spacing,
-                    marginBottom = _options.Spacing,
-                    marginLeft = _options.Spacing,
-                    marginRight = _options.Spacing,
-                    paddingTop = _options.Spacing / 2,
-                    paddingBottom = _options.Spacing / 2,
-                    paddingLeft = _options.Spacing / 2,
-                    paddingRight = _options.Spacing / 2,
                     flexWrap = new StyleEnum<Wrap>(Wrap.Wrap),
                     flexDirection = FlexDirection.Row,
                     flexGrow = 0
                 }
             };
+            slotContainerVe.style.MarginAll(_options.Spacing);
+            slotContainerVe.style.PaddingAll(_options.Spacing / 2);
             slotContainerVe.AddToClassList(InventoryUIClasses.SlotContainer);
             windowVe.Add(label);
             windowVe.Add(slotContainerVe);
@@ -91,16 +85,13 @@ namespace IMS.UI
                 {
                     style =
                     {
-                        marginTop = _options.Spacing / 2,
-                        marginBottom = _options.Spacing / 2,
-                        marginLeft = _options.Spacing / 2,
-                        marginRight = _options.Spacing / 2,
                         width = _options.SlotSize,
                         height = _options.SlotSize,
                         flexShrink = 0
                     },
                     userData = new InventorySlotUserData(slot.Index)
                 };
+                slotVe.style.MarginAll(_options.Spacing / 2);
                 slotVe.AddToClassList(InventoryUIClasses.Slot);
                 slotContainerVe.Add(slotVe);
                 _renderedSlots.Add(slotVe);
@@ -134,7 +125,6 @@ namespace IMS.UI
         {
             _logger.Info($"Render@{slotIndex}");
             var slot = _inventory.Slots[slotIndex];
-            if (slot.IsEmpty) return;
             var slotVe = _renderedSlots[slotIndex];
 
             var child = _itemRootVe.Children().FirstOrDefault(iVe =>
@@ -147,6 +137,7 @@ namespace IMS.UI
                 return false;
             });
             child?.RemoveFromHierarchy();
+            if (slot.IsEmpty) return;
 
             var itemVe = new VisualElement
             {
