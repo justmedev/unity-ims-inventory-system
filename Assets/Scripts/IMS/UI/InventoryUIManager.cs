@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using UnityEngine.UIElements;
 
 namespace IMS
@@ -7,11 +7,17 @@ namespace IMS
     /// <summary>
     ///     Manages the inventory's UI display and interaction. Only to be used by the <see cref="Inventory" />.
     /// </summary>
-    internal class InventoryUIManager
+    public class InventoryUIManager
     {
-        private Logger _logger = new(nameof(InventoryUIManager));
+        public delegate void ItemVisualElementModifier(ref VisualElement itemVe);
 
-        [NotNull] private readonly Inventory _inventory;
+        [CanBeNull] public ItemVisualElementModifier ItemModifier;
+
+        private readonly Logger _logger = new(nameof(InventoryUIManager));
+
+        [System.Diagnostics.CodeAnalysis.NotNull]
+        private readonly Inventory _inventory;
+
         private readonly InventoryUIOptions _options;
         private List<VisualElement> _renderedSlots = new();
 
@@ -38,7 +44,7 @@ namespace IMS
         /// <returns>The full inventory UI</returns>
         internal virtual void CreateInventory()
         {
-            var containerVe = new VisualElement
+            var windowVe = new VisualElement
             {
                 style =
                 {
@@ -48,7 +54,7 @@ namespace IMS
                     flexGrow = 0
                 }
             };
-            containerVe.AddToClassList("inventory__container");
+            windowVe.AddToClassList(InventoryUIClasses.WindowRoot);
 
             var label = new Label
             {
@@ -72,9 +78,9 @@ namespace IMS
                     flexGrow = 0
                 }
             };
-            slotContainerVe.AddToClassList("inventory__slot-container");
-            containerVe.Add(label);
-            containerVe.Add(slotContainerVe);
+            slotContainerVe.AddToClassList(InventoryUIClasses.SlotContainer);
+            windowVe.Add(label);
+            windowVe.Add(slotContainerVe);
 
             _renderedSlots = new List<VisualElement>();
             foreach (var _ in _inventory.Slots)
@@ -92,18 +98,18 @@ namespace IMS
                         flexShrink = 0
                     }
                 };
-                slotVe.AddToClassList("inventory__slot");
+                slotVe.AddToClassList(InventoryUIClasses.Slot);
                 slotContainerVe.Add(slotVe);
                 _renderedSlots.Add(slotVe);
             }
 
-            _options.InventoryRoot.Add(containerVe);
+            _options.InventoryRoot.Add(windowVe);
         }
 
         /// <summary>
         ///     Renders all slots. Do not use this when you know what slot index you want to update.
         /// </summary>
-        public void Render()
+        internal void Render()
         {
             foreach (var slot in _inventory.Slots)
             {
@@ -115,7 +121,7 @@ namespace IMS
         ///     Render a single slot by index (position).
         /// </summary>
         /// <param name="slotIndex">The position of the slot you want to render.</param>
-        public void Render(int slotIndex)
+        internal void Render(int slotIndex)
         {
             _logger.Info($"Render@{slotIndex}");
             var slot = _inventory.Slots[slotIndex];
@@ -135,13 +141,14 @@ namespace IMS
                     justifyContent = Justify.FlexEnd,
                 }
             };
-            itemVe.AddToClassList("inventory__slot-item");
+            itemVe.AddToClassList(InventoryUIClasses.SlotItem);
+            ItemModifier?.Invoke(ref itemVe);
 
             var label = new Label
             {
                 text = slot.GetItemStack().Quantity.ToString()
             };
-            label.AddToClassList("inventory__slot-item-qty");
+            label.AddToClassList(InventoryUIClasses.SlotItemQuantity);
 
             itemVe.Add(label);
             slotVe.Add(itemVe);

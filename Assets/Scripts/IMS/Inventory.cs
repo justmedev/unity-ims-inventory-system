@@ -48,6 +48,11 @@ namespace IMS
         /// </summary>
         public int Cols { get; }
 
+        public void SetUIManagerItemVisualElementModifier(InventoryUIManager.ItemVisualElementModifier modifier)
+        {
+            _uiManager.ItemModifier = modifier;
+        }
+
         public delegate void SlotModifier([NotNull] ref ItemStack stack);
 
         /// <summary>
