@@ -21,7 +21,6 @@ namespace IMS.UI
 
         private readonly InventoryUIOptions _options;
         private List<VisualElement> _renderedSlots = new();
-        private VisualElement _itemRootVe;
 
         internal InventoryUIManager(Inventory inv, InventoryUIOptions options)
         {
@@ -89,7 +88,7 @@ namespace IMS.UI
                         height = _options.SlotSize,
                         flexShrink = 0
                     },
-                    userData = new InventorySlotUserData(slot.Index)
+                    userData = new InventorySlotUserData(_inventory.Id, slot.Index)
                 };
                 slotVe.style.MarginAll(_options.Spacing / 2);
                 slotVe.AddToClassList(InventoryUIClasses.Slot);
@@ -97,13 +96,14 @@ namespace IMS.UI
                 _renderedSlots.Add(slotVe);
             }
 
-            _itemRootVe = new VisualElement
+            if (_options.ItemRoot == null)
             {
-                pickingMode = PickingMode.Ignore,
-            };
+                _options.ItemRoot = new VisualElement();
+                _options.InventoryRoot.Add(_options.ItemRoot);
+            }
 
+            _options.ItemRoot.pickingMode = PickingMode.Ignore;
             _options.InventoryRoot.Add(windowVe);
-            _options.InventoryRoot.Add(_itemRootVe);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace IMS.UI
             var slot = _inventory.Slots[slotIndex];
             var slotVe = _renderedSlots[slotIndex];
 
-            var child = _itemRootVe.Children().FirstOrDefault(iVe =>
+            var child = _options.ItemRoot!.Children().FirstOrDefault(iVe =>
             {
                 if (InventoryUIUtils.TryGetTypedUserData<InventoryItemUserData>(iVe, out var itemData))
                 {
@@ -152,7 +152,7 @@ namespace IMS.UI
                     flexGrow = 0,
                     aspectRatio = 1
                 },
-                userData = new InventoryItemUserData(slotIndex, slot.GetItemStack())
+                userData = new InventoryItemUserData(_inventory.Id, slotIndex, slot.GetItemStack())
             };
             itemVe.AddToClassList(InventoryUIClasses.SlotItem);
             ItemModifier?.Invoke(ref itemVe);
@@ -163,7 +163,7 @@ namespace IMS.UI
             };
             label.AddToClassList(InventoryUIClasses.SlotItemQuantity);
             itemVe.Add(label);
-            _itemRootVe.Add(itemVe);
+            _options.ItemRoot!.Add(itemVe);
 
             itemVe.RegisterCallbackOnce<GeometryChangedEvent>(_ =>
             {

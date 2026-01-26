@@ -12,8 +12,14 @@ namespace IMS.UI
         /// </summary>
         public readonly int Index;
 
-        public InventorySlotUserData(int index)
+        /// <summary>
+        ///     The id of the inventory that this item is in.
+        /// </summary>
+        public readonly int InventoryId;
+
+        public InventorySlotUserData(int inventoryId, int index)
         {
+            InventoryId = inventoryId;
             Index = index;
         }
     }

@@ -70,7 +70,6 @@ namespace IMS
         [NotNull]
         public ItemStack GetItemStack()
         {
-            _logger.Info($"GetImageStack() -> Empty? {IsEmpty} | ItemStack -> {ItemStack}");
             if (IsEmpty || ItemStack == null) throw new InventorySlotEmptyException(Index);
             return ItemStack;
         }

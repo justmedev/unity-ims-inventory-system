@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using UnityEngine.UIElements;
 
 namespace IMS.UI
@@ -13,6 +13,13 @@ namespace IMS.UI
         ///     The <see cref="VisualElement" /> this inventory UI attaches itself to. Could for example center the inventory.
         /// </summary>
         [NotNull] public VisualElement InventoryRoot;
+
+        /// <summary>
+        ///     All the items in the inventory are direct children of this <see cref="VisualElement"/>.
+        ///     Make sure this is always in front of everything. Multiple inventories can share a single
+        ///     <see cref="ItemRoot"/>.
+        /// </summary>
+        [CanBeNull] public VisualElement ItemRoot;
 
         /// <summary>
         ///     The size in pixels a inventory slot has. Inventory slots are always squares (1:1 aspect ratio)

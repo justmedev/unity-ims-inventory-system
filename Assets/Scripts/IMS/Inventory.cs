@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using IMS.Exceptions;
 using IMS.UI;
@@ -8,8 +9,13 @@ namespace IMS
     /// <summary>
     ///     Encapsulates the slots and ui with business logic for the inventory. Very customizable: size, name, ...
     /// </summary>
-    public class Inventory
+    public class Inventory : IDisposable
     {
+        /// <summary>
+        ///     The unique identifier for this inventory.
+        /// </summary>
+        public readonly int Id = AtomicIntSequencer.GetNext();
+
         [NotNull] private readonly List<InventorySlot> _slots;
 
         [NotNull] private readonly InventoryUIManager _uiManager;
@@ -30,6 +36,7 @@ namespace IMS
             for (var i = 0; i < cols * rows; i++) _slots.Add(new InventorySlot(i));
 
             _uiManager.CreateInventory();
+            InventoryManager.Instance.RegisterInventory(this);
         }
 
         /// <summary>
@@ -116,6 +123,31 @@ namespace IMS
         public void PropagateChanges()
         {
             _uiManager.Render();
+        }
+
+
+        private sealed class IdEqualityComparer : IEqualityComparer<Inventory>
+        {
+            public bool Equals(Inventory x, Inventory y)
+            {
+                if (ReferenceEquals(x, y)) return true;
+                if (x is null) return false;
+                if (y is null) return false;
+                if (x.GetType() != y.GetType()) return false;
+                return x.Id == y.Id;
+            }
+
+            public int GetHashCode(Inventory obj)
+            {
+                return obj.Id;
+            }
+        }
+
+        public static IEqualityComparer<Inventory> IdComparer { get; } = new IdEqualityComparer();
+
+        public void Dispose()
+        {
+            InventoryManager.Instance.UnregisterInventory(this);
         }
     }
 }
