@@ -1,4 +1,4 @@
-namespace IMS
+namespace IMS.UI
 {
     /// <summary>
     ///     Defines the class name constants that are added to different inventory attributes.

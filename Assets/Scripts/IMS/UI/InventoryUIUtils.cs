@@ -3,10 +3,21 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace IMS
+namespace IMS.UI
 {
+    /// <summary>
+    ///     Contains some UI utils like snapping or querying userData.
+    /// </summary>
     public static class InventoryUIUtils
     {
+        /// <summary>
+        ///     Get an inventory slot at a position. If one is found, true is returned, if none is found, false
+        ///     is returned.
+        /// </summary>
+        /// <param name="root">The VisualElement containing the inventory slots.</param>
+        /// <param name="position">The position you want to query.</param>
+        /// <param name="slotVe">The slot VisualElement, if found.</param>
+        /// <returns>Wheter a match was found.</returns>
         public static bool TryGetInventorySlotAtPosition(VisualElement root, Vector2 position,
             [CanBeNull] out VisualElement slotVe)
         {
@@ -16,16 +27,32 @@ namespace IMS
             return slotVe != null;
         }
 
-        public static void SetSlotUserData(VisualElement slot, InventorySlotUserData userData)
+        /// <summary>
+        ///     Try to get <see cref="userData"/> (with type <see cref="T"/>) of a <see cref="VisualElement"/> <see cref="ve"/>.
+        /// </summary>
+        /// <param name="ve">The <see cref="VisualElement"/> you want to get the <see cref="VisualElement.userData"/> on.</param>
+        /// <param name="userData">The <see cref="VisualElement.userData"/> with type <see cref="T"/> that was found.</param>
+        /// <typeparam name="T">The type of <see cref="VisualElement.userData"/> to check.</typeparam>
+        /// <returns>Whether a match was found.</returns>
+        public static bool TryGetTypedUserData<T>(VisualElement ve, [CanBeNull] out T userData) where T : class
         {
-            slot.userData = userData;
+            userData = null;
+            if (ve.userData is not T data) return false;
+            userData = data;
+            return true;
         }
 
-        [CanBeNull]
-        public static InventorySlotUserData GetSlotUserData(VisualElement slot)
+        /// <summary>
+        ///     Snap one <see cref="VisualElement"/> to the other's position.
+        /// </summary>
+        /// <param name="srcVe">The <see cref="VisualElement"/> to reposition.</param>
+        /// <param name="parentVe">The <see cref="VisualElement"/> that should be snapped to.</param>
+        public static void SnapVisualElementToOtherVisualElement(VisualElement srcVe, VisualElement parentVe)
         {
-            if (slot.userData is InventorySlotUserData data) return data;
-            return null;
+            var targetPos = parentVe.ChangeCoordinatesTo(srcVe.parent, Vector2.zero);
+            Debug.Log(targetPos);
+            srcVe.style.left = targetPos.x;
+            srcVe.style.top = targetPos.y;
         }
     }
 }

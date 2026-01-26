@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine.UIElements;
 
-namespace IMS
+namespace IMS.UI
 {
     /// <summary>
     ///     Supplied to the <see cref="Inventory" /> to customize the UI display of the inventory.

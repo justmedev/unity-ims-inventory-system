@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine.UIElements;
 
-namespace IMS
+namespace IMS.UI
 {
     /// <summary>
     ///     Manages the inventory's UI display and interaction. Only to be used by the <see cref="Inventory" />.
@@ -20,6 +21,7 @@ namespace IMS
 
         private readonly InventoryUIOptions _options;
         private List<VisualElement> _renderedSlots = new();
+        private VisualElement _itemRootVe;
 
         internal InventoryUIManager(Inventory inv, InventoryUIOptions options)
         {
@@ -83,7 +85,7 @@ namespace IMS
             windowVe.Add(slotContainerVe);
 
             _renderedSlots = new List<VisualElement>();
-            foreach (var _ in _inventory.Slots)
+            foreach (var slot in _inventory.Slots)
             {
                 var slotVe = new VisualElement
                 {
@@ -96,14 +98,21 @@ namespace IMS
                         width = _options.SlotSize,
                         height = _options.SlotSize,
                         flexShrink = 0
-                    }
+                    },
+                    userData = new InventorySlotUserData(slot.Index)
                 };
                 slotVe.AddToClassList(InventoryUIClasses.Slot);
                 slotContainerVe.Add(slotVe);
                 _renderedSlots.Add(slotVe);
             }
 
+            _itemRootVe = new VisualElement
+            {
+                pickingMode = PickingMode.Ignore,
+            };
+
             _options.InventoryRoot.Add(windowVe);
+            _options.InventoryRoot.Add(_itemRootVe);
         }
 
         /// <summary>
@@ -125,21 +134,34 @@ namespace IMS
         {
             _logger.Info($"Render@{slotIndex}");
             var slot = _inventory.Slots[slotIndex];
+            if (slot.IsEmpty) return;
             var slotVe = _renderedSlots[slotIndex];
 
-            slotVe.Clear();
-            if (slot.IsEmpty) return;
+            var child = _itemRootVe.Children().FirstOrDefault(iVe =>
+            {
+                if (InventoryUIUtils.TryGetTypedUserData<InventoryItemUserData>(iVe, out var itemData))
+                {
+                    return itemData?.AttachedSlotIndex == slotIndex;
+                }
+
+                return false;
+            });
+            child?.RemoveFromHierarchy();
 
             var itemVe = new VisualElement
             {
                 style =
                 {
                     backgroundImage = new StyleBackground(slot.GetItemStack().Item.GetSprite()),
-                    width = new StyleLength(new Length(100, LengthUnit.Percent)),
-                    height = new StyleLength(new Length(100, LengthUnit.Percent)),
+                    width = _options.SlotSize,
+                    height = _options.SlotSize,
                     alignContent = Align.FlexEnd,
                     justifyContent = Justify.FlexEnd,
-                }
+                    position = Position.Absolute,
+                    flexGrow = 0,
+                    aspectRatio = 1
+                },
+                userData = new InventoryItemUserData(slotIndex)
             };
             itemVe.AddToClassList(InventoryUIClasses.SlotItem);
             ItemModifier?.Invoke(ref itemVe);
@@ -149,9 +171,13 @@ namespace IMS
                 text = slot.GetItemStack().Quantity.ToString()
             };
             label.AddToClassList(InventoryUIClasses.SlotItemQuantity);
-
             itemVe.Add(label);
-            slotVe.Add(itemVe);
+            _itemRootVe.Add(itemVe);
+
+            itemVe.RegisterCallbackOnce<GeometryChangedEvent>(_ =>
+            {
+                InventoryUIUtils.SnapVisualElementToOtherVisualElement(itemVe, slotVe);
+            });
         }
     }
 }
