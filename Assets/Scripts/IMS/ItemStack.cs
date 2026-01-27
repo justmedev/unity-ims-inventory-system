@@ -111,12 +111,30 @@ namespace IMS
         /// <returns>A stack with all the items that could not be added (Due to reaching capacity mid-adding).</returns>
         public ItemStack AddStack([NotNull] ItemStack stack)
         {
+            if (stack.Item != Item) throw new IncompatibleItemException(Item, stack.Item);
             var overflow = new ItemStack(Item, 0)
             {
                 Quantity = Math.Max(0, Quantity + stack.Quantity - Item.GetMaxQuantity())
             };
             Quantity = Math.Min(Quantity + stack.Quantity, Item.GetMaxQuantity());
             return overflow;
+        }
+
+        protected bool Equals(ItemStack other)
+        {
+            return Item.Equals(other.Item);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((ItemStack)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Item.GetHashCode();
         }
     }
 }

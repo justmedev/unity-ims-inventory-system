@@ -49,7 +49,6 @@ namespace IMS.UI
         public static void SnapVisualElementToOtherVisualElement(VisualElement srcVe, VisualElement parentVe)
         {
             var targetPos = parentVe.ChangeCoordinatesTo(srcVe.parent, Vector2.zero);
-            Debug.Log(targetPos);
             srcVe.style.left = targetPos.x;
             srcVe.style.top = targetPos.y;
         }

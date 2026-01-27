@@ -27,5 +27,10 @@ namespace IMS
         /// <returns>Image to be used for inventories.</returns>
         [NotNull]
         public Sprite GetSprite();
+
+        public bool Equals(IItem other)
+        {
+            return GetName().Equals(other.GetName());
+        }
     }
 }

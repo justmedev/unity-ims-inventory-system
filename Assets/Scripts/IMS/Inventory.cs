@@ -113,7 +113,7 @@ namespace IMS
         /// <param name="index">The slot position/index you modified.</param>
         public void PropagateChange(int index)
         {
-            _uiManager.Render(index);
+            _uiManager.RebuildHierarchy(index);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace IMS
         /// </summary>
         public void PropagateChanges()
         {
-            _uiManager.Render();
+            _uiManager.RebuildHierarchy();
         }
 
 

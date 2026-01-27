@@ -1,6 +1,7 @@
 using Demo.Items;
 using IMS;
 using IMS.UI;
+using IMS.UI.DragAndDrop;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,8 +9,10 @@ namespace Demo
 {
     public class Main : MonoBehaviour
     {
-        [SerializeField] private Item item;
+        [SerializeField] private Item carrot;
+        [SerializeField] private Item cucumber;
         [SerializeField] private UIDocument document;
+        private OnDropHandler _onDropHandler = new();
         private Inventory _inventory;
         private Inventory _hotbar;
 
@@ -36,69 +39,22 @@ namespace Demo
             _hotbar.SetUIManagerItemVisualElementModifier((ref VisualElement ve) =>
                 CreateItemVisualElementModifier(_hotbar, document.rootVisualElement, ref ve));
 
-            _inventory.PlaceItemStack(0, new ItemStack(item, 5));
-            _inventory.PlaceItemStack(2, new ItemStack(item, 5));
-            _inventory.PlaceItemStack(4, new ItemStack(item, 5));
+            _inventory.PlaceItemStack(0, new ItemStack(carrot, 5));
+            _inventory.PlaceItemStack(2, new ItemStack(carrot, 5));
+            _inventory.PlaceItemStack(4, new ItemStack(carrot, 5));
+            _inventory.PlaceItemStack(5, new ItemStack(cucumber, 3));
         }
 
-        private static void CreateItemVisualElementModifier(Inventory inventory, VisualElement inventoryRoot,
+        private void CreateItemVisualElementModifier(Inventory inventory, VisualElement inventoryRoot,
             ref VisualElement ve)
         {
             var dm = new DragManipulator();
-            dm.OnDrop += (@event, itemVe) =>
-            {
-                if (!InventoryUIUtils.TryGetInventorySlotAtPosition(inventoryRoot, @event.position,
-                        out var slotVe)) return false;
-                if (!InventoryUIUtils.TryGetTypedUserData<InventorySlotUserData>(slotVe, out var slotData))
-                    return false;
-                if (!InventoryUIUtils.TryGetTypedUserData<InventoryItemUserData>(itemVe, out var itemData))
-                    return false;
-
-                var dstInventory = InventoryManager.Instance.GetInventoryById(slotData.InventoryId);
-
-                // Remove from previous
-                if (inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
-                {
-                    inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
-                    // TODO: Split stack
-                }
-
-                // Move into new
-                if (dstInventory.TryGetItemStackAt(slotData.Index, out _))
-                {
-                    var acceptItem = true;
-                    dstInventory.ModifySlotItemStack(slotData.Index, (ref ItemStack itemStack) =>
-                    {
-                        var overflow = itemStack.AddStack(itemData.ItemStack);
-                        itemVe.RemoveFromHierarchy();
-
-                        Debug.Log($"{overflow.Quantity} items overflowed!");
-                        if (overflow.Quantity > 0)
-                        {
-                            inventory.Slots[itemData.AttachedSlotIndex].PlaceItemStack(overflow);
-                            inventory.PropagateChange(itemData.AttachedSlotIndex);
-                            acceptItem = false;
-                        }
-                        else
-                        {
-                            acceptItem = true;
-                        }
-                    });
-                    return acceptItem;
-                }
-
-                dstInventory.PlaceItemStack(slotData.Index, itemData.ItemStack);
-                itemVe.RemoveFromHierarchy();
-
-                // Remove from previous index
-                // if (inventory.TryGetItemStackAt(itemData.AttachedSlotIndex, out _))
-                // {
-                //     inventory.Slots[itemData.AttachedSlotIndex].RemoveItemStack();
-                //     // TODO: Split stack
-                // }
-
-                return true;
-            };
+            dm.OnDrop += (pointerEvent, target) => _onDropHandler.HandleOnDrop(new ExternalDropData(
+                inventoryRoot,
+                target,
+                pointerEvent,
+                inventory
+            ));
             ve.AddManipulator(dm);
         }
     }

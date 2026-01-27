@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace IMS.UI
+namespace IMS.UI.DragAndDrop
 {
     /// <summary>
     ///     A <see cref="PointerManipulator"/> that implements basic <see cref="VisualElement"/> dragging with events.

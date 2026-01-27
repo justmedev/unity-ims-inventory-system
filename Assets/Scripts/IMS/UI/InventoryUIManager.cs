@@ -107,23 +107,25 @@ namespace IMS.UI
         }
 
         /// <summary>
-        ///     Renders all slots. Do not use this when you know what slot index you want to update.
+        ///     Rebuild the hierarchy for all slots. Do not use this when you know what slot index you want to update.
+        ///     This will cause a rerender from UI Toolkit at some later point.
         /// </summary>
-        internal void Render()
+        internal void RebuildHierarchy()
         {
             foreach (var slot in _inventory.Slots)
             {
-                Render(slot.Index);
+                RebuildHierarchy(slot.Index);
             }
         }
 
         /// <summary>
-        ///     Render a single slot by index (position).
+        ///     Build the visual hierarchy for a single slot by index (position).
+        ///     This will cause a rerender from UI Toolkit at some later point.
         /// </summary>
         /// <param name="slotIndex">The position of the slot you want to render.</param>
-        internal void Render(int slotIndex)
+        internal void RebuildHierarchy(int slotIndex)
         {
-            _logger.Info($"Render@{slotIndex}");
+            _logger.Info($"Inventory {_inventory.Id}: RebuildHierarchy@{slotIndex}");
             var slot = _inventory.Slots[slotIndex];
             var slotVe = _renderedSlots[slotIndex];
 
@@ -131,7 +133,7 @@ namespace IMS.UI
             {
                 if (InventoryUIUtils.TryGetTypedUserData<InventoryItemUserData>(iVe, out var itemData))
                 {
-                    return itemData?.AttachedSlotIndex == slotIndex;
+                    return itemData?.AttachedSlotIndex == slotIndex && itemData.InventoryId == _inventory.Id;
                 }
 
                 return false;
