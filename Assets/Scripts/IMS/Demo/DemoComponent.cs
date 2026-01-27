@@ -1,13 +1,14 @@
-using Demo.Items;
-using IMS;
 using IMS.UI;
 using IMS.UI.DragAndDrop;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Demo
+namespace IMS.Demo
 {
-    public class Main : MonoBehaviour
+    /// <summary>
+    ///     A simple component that demonstrates the use the IMS inventory system. 
+    /// </summary>
+    public class DemoComponent : MonoBehaviour
     {
         [SerializeField] private Item carrot;
         [SerializeField] private Item cucumber;

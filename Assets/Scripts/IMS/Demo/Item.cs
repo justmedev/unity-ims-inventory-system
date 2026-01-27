@@ -1,7 +1,6 @@
-using IMS;
 using UnityEngine;
 
-namespace Demo.Items
+namespace IMS.Demo
 {
     [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects", order = 0)]
     public class Item : ScriptableObject, IItem
