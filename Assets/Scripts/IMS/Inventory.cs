@@ -11,14 +11,20 @@ namespace IMS
     /// </summary>
     public class Inventory : IDisposable
     {
-        /// <summary>
-        ///     The unique identifier for this inventory.
-        /// </summary>
-        public readonly int Id = AtomicIntSequencer.GetNext();
+        #region Delegates
+
+        public delegate void SlotModifier([NotNull] ref ItemStack stack);
+
+        #endregion
 
         [NotNull] private readonly List<InventorySlot> _slots;
 
         [NotNull] private readonly InventoryUIManager _uiManager;
+
+        /// <summary>
+        ///     The unique identifier for this inventory.
+        /// </summary>
+        public readonly int Id = AtomicIntSequencer.GetNext();
 
         /// <summary>
         ///     Create a new inventory, also creates the slots and UI. The size cannot be changed later.
@@ -56,6 +62,17 @@ namespace IMS
         /// </summary>
         public int Cols { get; }
 
+        public static IEqualityComparer<Inventory> IdComparer { get; } = new IdEqualityComparer();
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            InventoryManager.Instance.UnregisterInventory(this);
+        }
+
+        #endregion
+
         public void SetUIManagerItemVisualElementModifier(InventoryUIManager.ItemVisualElementModifier modifier)
         {
             _uiManager.ItemModifier = modifier;
@@ -65,7 +82,7 @@ namespace IMS
         ///     Try to get an item stack at an index (inventory position).
         /// </summary>
         /// <param name="index">The position in the inventory.</param>
-        /// <param name="itemStack">The <see cref="ItemStack"/> at that position.</param>
+        /// <param name="itemStack">The <see cref="ItemStack" /> at that position.</param>
         /// <returns>Whether a match was found.</returns>
         public bool TryGetItemStackAt(int index, out ItemStack itemStack)
         {
@@ -77,15 +94,13 @@ namespace IMS
             return true;
         }
 
-        public delegate void SlotModifier([NotNull] ref ItemStack stack);
-
         /// <summary>
-        ///     Modify slot <see cref="ItemStack"/> data and re-render the UI at once.
+        ///     Modify slot <see cref="ItemStack" /> data and re-render the UI at once.
         /// </summary>
         /// <remarks>WARNING: ItemStack cannot be null!</remarks>
         /// <param name="index">Position of the slot</param>
-        /// <param name="modifier">Lambda with <see cref="ItemStack"/> reference you can modify.</param>
-        /// <exception cref="InventorySlotEmptyException">When <see cref="ItemStack"/> is null.</exception>
+        /// <param name="modifier">Lambda with <see cref="ItemStack" /> reference you can modify.</param>
+        /// <exception cref="InventorySlotEmptyException">When <see cref="ItemStack" /> is null.</exception>
         public void ModifySlotItemStack(int index, [NotNull] SlotModifier modifier)
         {
             var stack = _slots[index].ItemStack;
@@ -107,7 +122,7 @@ namespace IMS
         }
 
         /// <summary>
-        ///     After directly modifying the <see cref="Slots"/> data (adding/removing stacks, modifying content, ...)
+        ///     After directly modifying the <see cref="Slots" /> data (adding/removing stacks, modifying content, ...)
         ///     This should be called to reflect the changes in the UI.
         /// </summary>
         /// <param name="index">The slot position/index you modified.</param>
@@ -117,7 +132,7 @@ namespace IMS
         }
 
         /// <summary>
-        ///     After directly modifying multiple <see cref="Slots"/>, or <see cref="Slots"/> you do not know the
+        ///     After directly modifying multiple <see cref="Slots" />, or <see cref="Slots" /> you do not know the
         ///     index off, call this to re-render all the UI.
         /// </summary>
         public void PropagateChanges()
@@ -125,9 +140,12 @@ namespace IMS
             _uiManager.RebuildHierarchy();
         }
 
+        #region Nested type: IdEqualityComparer
 
         private sealed class IdEqualityComparer : IEqualityComparer<Inventory>
         {
+            #region IEqualityComparer<Inventory> Members
+
             public bool Equals(Inventory x, Inventory y)
             {
                 if (ReferenceEquals(x, y)) return true;
@@ -141,13 +159,10 @@ namespace IMS
             {
                 return obj.Id;
             }
+
+            #endregion
         }
 
-        public static IEqualityComparer<Inventory> IdComparer { get; } = new IdEqualityComparer();
-
-        public void Dispose()
-        {
-            InventoryManager.Instance.UnregisterInventory(this);
-        }
+        #endregion
     }
 }

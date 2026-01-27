@@ -6,16 +6,16 @@ using UnityEngine.UIElements;
 namespace IMS.Demo
 {
     /// <summary>
-    ///     A simple component that demonstrates the use the IMS inventory system. 
+    ///     A simple component that demonstrates the use the IMS inventory system.
     /// </summary>
     public class DemoComponent : MonoBehaviour
     {
         [SerializeField] private Item carrot;
         [SerializeField] private Item cucumber;
         [SerializeField] private UIDocument document;
-        private OnDropHandler _onDropHandler = new();
-        private Inventory _inventory;
         private Inventory _hotbar;
+        private Inventory _inventory;
+        private readonly OnDropHandler _onDropHandler = new();
 
         private void Start()
         {

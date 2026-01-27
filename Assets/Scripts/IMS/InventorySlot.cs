@@ -8,12 +8,12 @@ namespace IMS
     /// </summary>
     public class InventorySlot
     {
-        private Logger _logger = new(nameof(InventorySlot));
-
         /// <summary>
         ///     The position of this slot
         /// </summary>
         public readonly int Index;
+
+        private Logger _logger = new(nameof(InventorySlot));
 
         /// <summary>
         ///     Represents a single inventory slot with an ItemStack and a position (index). This should be created with
@@ -51,7 +51,7 @@ namespace IMS
         ///     Remove an ItemStack from the slot.
         /// </summary>
         /// <exception cref="InventorySlotEmptyException">When the slot is empty.</exception>
-        /// <returns>The removed <see cref="ItemStack"/></returns>
+        /// <returns>The removed <see cref="ItemStack" /></returns>
         public ItemStack RemoveItemStack()
         {
             if (ItemStack == null) throw new InventorySlotEmptyException(Index);

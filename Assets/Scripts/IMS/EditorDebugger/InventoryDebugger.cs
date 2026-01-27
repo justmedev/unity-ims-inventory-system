@@ -15,11 +15,11 @@ namespace IMS.EditorDebugger
     ///     <c>Inventory</c> on a GameObject and allows switching between them via tabs.
     /// </summary>
     /// <example>
-    /// MyComponent.cs:
-    /// <code>
+    ///     MyComponent.cs:
+    ///     <code>
     /// public class MyComponent {
     ///     private Inventory _inventory;
-    ///
+    /// 
     ///     private void Start() {
     ///         _inventory = new Inventory(...);
     ///     }
@@ -29,19 +29,13 @@ namespace IMS.EditorDebugger
     internal class InventoryDebugger : EditorWindow
     {
         private readonly List<Inventory> _detectedInventories = new();
-        private Inventory _selectedInventory;
-
-        private ListView _listView;
-        private Label _statusLabel;
         private ObjectField _gameObjectField;
-        private VisualElement _tabHeader;
         private VisualElement _listContainer;
 
-        [MenuItem("Window/IMS/Inventory Debugger")]
-        private static void ShowWindow()
-        {
-            GetWindow<InventoryDebugger>("Inventory Debugger");
-        }
+        private ListView _listView;
+        private Inventory _selectedInventory;
+        private Label _statusLabel;
+        private VisualElement _tabHeader;
 
         private void CreateGUI()
         {
@@ -105,6 +99,12 @@ namespace IMS.EditorDebugger
 
             // Refresh timer to catch changes in quantity or content during playmode
             root.schedule.Execute(() => _listView.RefreshItems()).Every(500);
+        }
+
+        [MenuItem("Window/IMS/Inventory Debugger")]
+        private static void ShowWindow()
+        {
+            GetWindow<InventoryDebugger>("Inventory Debugger");
         }
 
         private void FindInventoriesInTarget()
@@ -186,7 +186,7 @@ namespace IMS.EditorDebugger
             {
                 if (child is Button b)
                 {
-                    bool isActive = b.text == inv.Name;
+                    var isActive = b.text == inv.Name;
                     b.style.backgroundColor =
                         isActive ? new Color(0.35f, 0.35f, 0.35f) : new Color(0.22f, 0.22f, 0.22f);
                     b.style.borderBottomWidth = isActive ? 2 : 0;
