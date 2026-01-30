@@ -11,12 +11,18 @@ namespace IMS.UI
         public const string WindowRoot = "inventory__container";
 
         /// <summary>
-        ///     The container below the label that holds just the slots (inside <see cref="WindowRoot"/>)
+        ///     The container below the label that holds all the rows with the slots (inside <see cref="WindowRoot"/>)
         /// </summary>
         public const string SlotContainer = "inventory__slot-container";
 
         /// <summary>
-        ///     A single slot inside the <see cref="SlotContainer"/>
+        ///     The container in which the slots are placed under. An inventory has multiple rows that are placed under
+        ///     the <see cref="SlotContainer"/>
+        /// </summary>
+        public const string Row = "inventory__row";
+
+        /// <summary>
+        ///     A single slot inside the <see cref="Row"/>
         /// </summary>
         public const string Slot = "inventory__slot";
 

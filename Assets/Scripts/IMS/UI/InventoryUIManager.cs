@@ -26,6 +26,10 @@ namespace IMS.UI
         {
             _inventory = inv;
             _options = options;
+            _options.InventoryRoot.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                if (evt.newRect.size != evt.oldRect.size) RebuildHierarchy();
+            });
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace IMS.UI
                     // TODO: Actually fix this issues because this will break multi-row inventories
                     // BUG: width calculated too small in constant physical size mode which causes
                     // inventory to wrap early
-                    width = _options.Spacing * (_inventory.Cols + 1) + _options.SlotSize * _inventory.Cols,
+                    // width = _options.Spacing * (_inventory.Cols + 1) + _options.SlotSize * _inventory.Cols,
                     flexGrow = 0
                 }
             };
@@ -68,32 +72,27 @@ namespace IMS.UI
                 style =
                 {
                     flexWrap = new StyleEnum<Wrap>(Wrap.Wrap),
-                    flexDirection = FlexDirection.Row,
-                    flexGrow = 0
+                    flexGrow = 0,
                 }
             };
             slotContainerVe.style.PaddingAll(_options.Spacing / 2);
-            slotContainerVe.AddToClassList(InventoryUIClasses.SlotContainer);
+            slotContainerVe.AddToClassList(InventoryUIClasses.Row);
             windowVe.Add(label);
             windowVe.Add(slotContainerVe);
 
             _renderedSlots = new List<VisualElement>();
-            foreach (var slot in _inventory.Slots)
+            var rowCount = _inventory.Slots.Count / _inventory.Cols;
+            for (var row = 1; row <= rowCount; row++)
             {
-                var slotVe = new VisualElement
+                var rowVe = CreateInventoryRow();
+                slotContainerVe.Add(rowVe);
+                for (var col = 1; col <= _inventory.Cols; col++)
                 {
-                    style =
-                    {
-                        width = _options.SlotSize,
-                        height = _options.SlotSize,
-                        flexShrink = 0
-                    },
-                    userData = new InventorySlotUserData(_inventory.Id, slot.Index)
-                };
-                slotVe.style.MarginAll(_options.Spacing / 2);
-                slotVe.AddToClassList(InventoryUIClasses.Slot);
-                slotContainerVe.Add(slotVe);
-                _renderedSlots.Add(slotVe);
+                    var slot = _inventory.Slots[row * col - 1];
+                    var slotVe = CreateInventorySlot(slot.Index);
+                    rowVe.Add(slotVe);
+                    _renderedSlots.Add(slotVe);
+                }
             }
 
             if (_options.ItemRoot == null)
@@ -104,6 +103,47 @@ namespace IMS.UI
 
             _options.ItemRoot.pickingMode = PickingMode.Ignore;
             _options.InventoryRoot.Add(windowVe);
+        }
+
+        /// <summary>
+        ///     Creates and returns a single inventory row.
+        /// </summary>
+        /// <returns>The created <see cref="VisualElement"/>.</returns>
+        [NotNull]
+        protected VisualElement CreateInventoryRow()
+        {
+            var row = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                }
+            };
+            row.AddToClassList(InventoryUIClasses.Row);
+            return row;
+        }
+
+        /// <summary>
+        ///     Creates and returns a single inventory slot.
+        /// </summary>
+        /// <param name="slotIndex">The index of the slot to create (saved in userData).</param>
+        /// <returns>The created <see cref="VisualElement"/>.</returns>
+        [NotNull]
+        protected VisualElement CreateInventorySlot(int slotIndex)
+        {
+            var slotVe = new VisualElement
+            {
+                style =
+                {
+                    width = _options.SlotSize,
+                    height = _options.SlotSize,
+                    flexShrink = 0
+                },
+                userData = new InventorySlotUserData(_inventory.Id, slotIndex)
+            };
+            slotVe.style.MarginAll(_options.Spacing / 2);
+            slotVe.AddToClassList(InventoryUIClasses.Slot);
+            return slotVe;
         }
 
         /// <summary>
