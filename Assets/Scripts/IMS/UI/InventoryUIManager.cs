@@ -49,9 +49,10 @@ namespace IMS.UI
             {
                 style =
                 {
-                    marginLeft = _options.Spacing * 2,
-                    marginRight = _options.Spacing * 2,
-                    width = (_options.SlotSize + _options.Spacing) * _inventory.Cols + _options.Spacing * 3,
+                    // TODO: Actually fix this issues because this will break multi-row inventories
+                    // BUG: width calculated too small in constant physical size mode which causes
+                    // inventory to wrap early
+                    width = _options.Spacing * (_inventory.Cols + 1) + _options.SlotSize * _inventory.Cols,
                     flexGrow = 0
                 }
             };
@@ -71,7 +72,6 @@ namespace IMS.UI
                     flexGrow = 0
                 }
             };
-            slotContainerVe.style.MarginAll(_options.Spacing);
             slotContainerVe.style.PaddingAll(_options.Spacing / 2);
             slotContainerVe.AddToClassList(InventoryUIClasses.SlotContainer);
             windowVe.Add(label);
@@ -148,8 +148,6 @@ namespace IMS.UI
                     backgroundImage = new StyleBackground(slot.GetItemStack().Item.GetSprite()),
                     width = _options.SlotSize,
                     height = _options.SlotSize,
-                    alignContent = Align.FlexEnd,
-                    justifyContent = Justify.FlexEnd,
                     position = Position.Absolute,
                     flexGrow = 0,
                     aspectRatio = 1
