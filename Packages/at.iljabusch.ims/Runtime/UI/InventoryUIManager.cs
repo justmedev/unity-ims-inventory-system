@@ -88,7 +88,7 @@ namespace IMS.UI
                 slotContainerVe.Add(rowVe);
                 for (var col = 1; col <= _inventory.Cols; col++)
                 {
-                    var slot = _inventory.Slots[row * col - 1];
+                    var slot = _inventory.Slots[_inventory.Cols * (row - 1) + col - 1];
                     var slotVe = CreateInventorySlot(slot.Index);
                     rowVe.Add(slotVe);
                     _renderedSlots.Add(slotVe);
@@ -131,6 +131,7 @@ namespace IMS.UI
         [NotNull]
         protected VisualElement CreateInventorySlot(int slotIndex)
         {
+            _logger.Info($"CreateInventorySlot(slotIndex: {slotIndex})");
             var slotVe = new VisualElement
             {
                 style =
