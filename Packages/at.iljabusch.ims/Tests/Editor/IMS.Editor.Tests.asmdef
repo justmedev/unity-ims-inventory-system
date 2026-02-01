@@ -1,0 +1,14 @@
+{
+  "name": "IMS.Editor.Tests",
+  "references": [
+    "IMS.Editor",
+    "IMS"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

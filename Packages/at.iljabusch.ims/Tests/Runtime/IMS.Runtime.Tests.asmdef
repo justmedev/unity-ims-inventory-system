@@ -1,0 +1,12 @@
+{
+  "name": "IMS.Runtime.Tests",
+  "references": [
+    "IMS"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+  ],
+  "excludePlatforms": []
+}

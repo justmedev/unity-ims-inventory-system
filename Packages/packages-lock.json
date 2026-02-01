@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "at.iljabusch.ims": {
+      "version": "file:at.iljabusch.ims",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "13.0.2",
       "depth": 0,
