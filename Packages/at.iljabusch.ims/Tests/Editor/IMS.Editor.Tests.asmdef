@@ -1,11 +1,14 @@
 {
-  "name": "IljaBusch.IMS.Tests",
+  "name": "IMS.Editor.Tests",
   "references": [
-    "IljaBusch.IMS"
+    "IMS.Editor",
+    "IMS"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"
   ],
-  "includePlatforms": [],
+  "includePlatforms": [
+    "Editor"
+  ],
   "excludePlatforms": []
 }

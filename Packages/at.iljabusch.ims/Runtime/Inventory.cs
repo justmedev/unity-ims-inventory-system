@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using IMS.Exceptions;
 using IMS.UI;
 using JetBrains.Annotations;
+
+[assembly: InternalsVisibleTo("IMS.Editor")]
 
 namespace IMS
 {

@@ -1,5 +1,6 @@
 {
-  "name": "IljaBusch.IMS",
+  "name": "IMS",
+  "rootNamespace": "IMS",
   "references": [],
   "includePlatforms": [],
   "excludePlatforms": []

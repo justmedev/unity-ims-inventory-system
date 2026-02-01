@@ -1,8 +1,8 @@
 {
-  "name": "IljaBusch.IMS.Editor",
-  "rootNamespace": "",
+  "name": "IMS.Editor",
+  "rootNamespace": "IMS",
   "references": [
-    "IljaBusch.IMS"
+    "IMS"
   ],
   "includePlatforms": [
     "Android",

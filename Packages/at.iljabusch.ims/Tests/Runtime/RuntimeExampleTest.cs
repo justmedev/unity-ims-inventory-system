@@ -2,7 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
-namespace IljaBusch.IMS.Tests
+namespace IMS.Tests
 {
     class RuntimeExampleTest
     {

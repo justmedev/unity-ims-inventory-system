@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace IMS.EditorDebugger
+namespace IMS.Editor
 {
     /// <summary>
     ///     A Unity editor window to debug Inventory instances. Uses reflection to search for all variables of type
