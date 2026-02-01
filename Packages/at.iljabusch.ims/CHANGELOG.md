@@ -8,4 +8,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### This is the first release of *\<IMS\>*.
 
-*Short description of this release*
+*Packged IMS on UPM*
