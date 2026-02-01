@@ -1,0 +1,11 @@
+{
+  "name": "at.iljabusch.ims",
+  "displayName": "IMS",
+  "version": "0.1.0",
+  "unity": "6000.3",
+  "unityRelease": "5f1",
+  "description": "IMS (Inventory Management System) is a system designed to easily create and manage multiple game inventories with a custom styling through UI Toolkit USS Stylesheets.\nIMS makes it easy to create, debug and extend inventories in Unity games.",
+  "author": {
+    "name": "Ilja Busch"
+  }
+}

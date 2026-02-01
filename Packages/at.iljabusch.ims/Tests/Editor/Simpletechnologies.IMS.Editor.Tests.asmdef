@@ -1,0 +1,14 @@
+{
+  "name": "Simpletechnologies.IMS.Editor.Tests",
+  "references": [
+    "Simpletechnologies.IMS.Editor",
+    "Simpletechnologies.IMS"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

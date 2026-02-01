@@ -1,0 +1,11 @@
+{
+  "name": "Simpletechnologies.IMS.Tests",
+  "references": [
+    "Simpletechnologies.IMS"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": []
+}

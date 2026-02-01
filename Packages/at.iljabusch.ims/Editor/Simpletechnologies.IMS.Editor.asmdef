@@ -1,0 +1,10 @@
+{
+  "name": "Simpletechnologies.IMS.Editor",
+  "references": [
+    "Simpletechnologies.IMS"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
