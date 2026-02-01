@@ -1,7 +1,7 @@
 {
-  "name": "Simpletechnologies.IMS.Tests",
+  "name": "IljaBusch.IMS.Tests",
   "references": [
-    "Simpletechnologies.IMS"
+    "IljaBusch.IMS"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

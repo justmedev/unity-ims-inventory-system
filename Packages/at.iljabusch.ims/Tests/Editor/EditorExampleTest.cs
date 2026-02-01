@@ -2,7 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
-namespace Simpletechnologies.IMS.Editor.Tests
+namespace IljaBusch.IMS.Editor.Tests
 {
     class EditorExampleTest
     {

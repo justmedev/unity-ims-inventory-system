@@ -5,7 +5,7 @@
 //
 // -----------------------------------------------------------------------------
 
-namespace Simpletechnologies.IMS
+namespace IljaBusch.IMS
 {
     /// <summary>
     /// Provide a general description of the public class.

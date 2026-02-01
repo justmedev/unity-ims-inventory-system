@@ -1,8 +1,8 @@
 {
-  "name": "Simpletechnologies.IMS.Editor.Tests",
+  "name": "IljaBusch.IMS.Editor.Tests",
   "references": [
-    "Simpletechnologies.IMS.Editor",
-    "Simpletechnologies.IMS"
+    "IljaBusch.IMS.Editor",
+    "IljaBusch.IMS"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

@@ -4,7 +4,7 @@
 //
 // -----------------------------------------------------------------------------
 
-namespace Simpletechnologies.IMS.Editor
+namespace IljaBusch.IMS.Editor
 {
     /// <summary>
     /// Provide a general description of the public class.
