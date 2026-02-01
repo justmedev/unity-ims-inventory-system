@@ -1,0 +1,16 @@
+{
+  "name": "IMS.DragDemo",
+  "rootNamespace": "",
+  "references": [
+    "GUID:fe7f76d45fe86ab1cb511b12172731a4"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb7a7fa5629a434c9c4870801bfe69d4, type: 3}
-  m_Name: Carrot
+  m_Script: {fileID: 11500000, guid: fb7337b7df7c486cbe0b2207eb7216da, type: 3}
+  m_Name: Cucumber
   m_EditorClassIdentifier: Assembly-CSharp::Demo.Items.Item
-  label: Carrot
-  maxStackSize: 10
-  sprite: {fileID: 21300000, guid: 985747ea4ab0fab8c8e704b7b941fbb3, type: 3}
+  label: Cucumber
+  maxStackSize: 5
+  sprite: {fileID: -49827021452715039, guid: 76f4fa93d8ea1eb6f9c3092f836699b5, type: 3}
